@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samanvay</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .card {
+            background: white;
+            border-radius: 15px;
+            border: 1px solid rgb(220, 220, 226);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            text-align: left;
+            padding: 16px;
+            color: #64748b;
+            font-weight: 400;
+            font-size: 0.875rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        td {
+            padding: 16px;
+            background-color: white;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.875rem;
+        }
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background-color: #f1f5f9;
+            color: #1e293b;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .btn-pay {
+            background-color: #2563eb;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        .btn-pay:hover {
+            background-color: #1d4ed8;
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+        }
+        @media (max-width: 640px) {
+            th, td { padding: 10px 8px; font-size: 0.75rem; }
+            .btn-pay { padding: 6px 10px; font-size: 0.75rem; }
+        }
+        /* Fee breakdown mobile slider */
+        .fee-slider-wrap {
+            display: none;
+        }
+        /* Mobile menu */
+        #mobile-menu { display: none; }
+        #mobile-menu.open { display: block; }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-2">
+                        <div class="flex items-center">
+                            <img src="https://samanvay.gucpc.in/images/gujarat-university-logo.png" alt="University Logo" class="h-8 sm:h-10 w-auto">
+                            <img src="https://samanvay.gucpc.in/images/gucpc-logo.png" alt="GUCPC Logo" class="h-6 sm:h-8 w-auto ml-1 sm:ml-2 hidden xs:inline">
+                            <img src="https://samanvay.gucpc.in/images/samanvay-logo.png" alt="Samanvay Logo" class="h-8 sm:h-10 w-auto ml-1 sm:ml-2 hidden sm:inline">
+                        </div>
+                        <div class="flex flex-col ml-1">
+                            <h1 class="text-base sm:text-xl lg:text-2xl font-bold text-slate-900 leading-none tracking-tight">Samanvay Portico</h1>
+                            <span class="hidden sm:block text-[11px] sm:text-[13px] text-slate-500 font-medium mt-1">The Architecture of Learning</span>
+                        </div>
+                    </div>
+                    <div class="hidden xl:flex ml-8 space-x-6">
+                        <a href="#" class="text-slate-600 hover:text-blue-600 text-[13px] font-semibold flex items-center gap-2 transition-colors">
+                            <i class="fas fa-home-alt text-xs"></i> Dashboard
+                        </a>
+                        <a href="#" class="text-slate-600 hover:text-blue-600 text-[13px] font-semibold flex items-center gap-2 transition-colors">
+                            <i class="fas fa-user-graduate text-xs"></i> Placed Students
+                        </a>
+                        <a href="#" class="text-slate-600 hover:text-blue-600 text-[13px] font-semibold flex items-center gap-2 transition-colors">
+                            <i class="fas fa-comment-dots text-xs"></i> Contact Prof.
+                        </a>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button class="p-2 text-slate-500 hover:bg-slate-50 rounded-lg border border-slate-100 transition-all">
+                        <i class="fas fa-sun text-sm"></i>
+                    </button>
+                    <div class="hidden lg:flex items-center gap-3 pl-2">
+                        <div class="text-right">
+                            <p class="text-[11px] font-bold text-slate-900 uppercase tracking-wide">SAPARA JAYDIP GORDHANBHAI</p>
+                            <p class="text-[10px] text-slate-500 font-medium text-right">Student</p>
+                        </div>
+                        <button class="flex items-center gap-2 text-slate-700 bg-white border border-slate-200 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-slate-50 transition-all shadow-sm">
+                            <i class="fas fa-sign-out-alt text-xs text-slate-400"></i> Logout
+                        </button>
+                    </div>
+                    <button id="menu-toggle" class="xl:hidden p-2 text-slate-600 hover:bg-slate-50 rounded-lg">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="xl:hidden bg-white border-b border-slate-200 px-4 py-4 space-y-3">
+        <a href="#" class="text-slate-600 text-sm font-semibold flex items-center gap-2"><i class="fas fa-home-alt text-xs"></i> Dashboard</a>
+        <a href="#" class="text-slate-600 text-sm font-semibold flex items-center gap-2"><i class="fas fa-user-graduate text-xs"></i> Placed Students</a>
+        <a href="#" class="text-slate-600 text-sm font-semibold flex items-center gap-2"><i class="fas fa-comment-dots text-xs"></i> Contact Prof.</a>
+        <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
+            <div>
+                <p class="text-xs font-bold text-slate-900 uppercase">SAPARA JAYDIP GORDHANBHAI</p>
+                <p class="text-[10px] text-slate-500">Student</p>
+            </div>
+            <button class="flex items-center gap-2 text-slate-700 bg-white border border-slate-200 px-3 py-1.5 rounded-lg text-xs font-bold">
+                <i class="fas fa-sign-out-alt text-xs text-slate-400"></i> Logout
+            </button>
+        </div>
+    </div>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header Section -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+            <div>
+                <h2 class="text-3xl font-bold tracking-tight">My Fees</h2>
+                <p class="text-slate-500">View your fee structure and payment history</p>
+            </div>
+            <button class="flex items-center gap-2 bg-white border border-slate-200 px-4 py-2 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                <i class="fas fa-wallet text-slate-600"></i>
+                <span class="font-semibold text-sm">Fee Portal</span>
+            </button>
+        </div>
+
+        <!-- Student Information & Total Fees -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+            <div class="card lg:col-span-2">
+                <h3 class="text-lg font-bold mb-6">Student Information</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <p class="text-slate-500 text-xs font-medium uppercase mb-1">Name</p>
+                        <p class="font-bold text-slate-900">SAPARA JAYDIP GORDHANBHAI</p>
+                    </div>
+                    <div>
+                        <p class="text-slate-500 text-xs font-medium uppercase mb-1">Enrollment Number</p>
+                        <p class="font-bold text-slate-900">202319600107</p>
+                    </div>
+                    <div class="md:col-span-1">
+                        <p class="text-slate-500 text-xs font-medium uppercase mb-1">Course</p>
+                        <p class="font-bold text-slate-900 leading-tight">Integrated M.Sc. IT Software Development (Web & Mobile)</p>
+                    </div>
+                    <div class="md:col-span-1">
+                        <p class="text-slate-500 text-xs font-medium uppercase mb-1">Current Semester</p>
+                        <p class="font-bold text-slate-900">6 / 10</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card flex items-center justify-between">
+                <div>
+                    <p class="text-slate-500 text-xs font-medium uppercase mb-1">Total Fees</p>
+                    <p class="text-2xl sm:text-3xl font-extrabold text-slate-900">₹243850.00</p>
+                    <p class="text-slate-500 text-xs mt-1">Up to Semester 6</p>
+                </div>
+                <div class="h-12 w-12 bg-blue-50 flex items-center justify-center rounded-full">
+                    <i class="fas fa-dollar-sign text-blue-500 text-xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Semester-wise Fee Breakdown -->
+        <div class="card p-0 overflow-hidden">
+            <div class="px-6 pt-6 mb-2">
+                <h3 class="text-lg font-bold">Semester-wise Fee Breakdown</h3>
+                <p class="text-slate-500 text-sm">Showing Semesters 3 to 6</p>
+            </div>
+
+            <!-- Desktop Table -->
+            <div class="fee-table-wrap table-container">
+                <table class="min-w-full">
+                    <thead>
+                        <tr>
+                            <th class="pl-6">Semester</th>
+                            <th>Semester Fee</th>
+                            <th>Exam Fee</th>
+                            <th>Total</th>
+                            <th>Paid</th>
+                            <th>Remaining</th>
+                            <th>Status</th>
+                            <th class="pr-6">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="pl-6 font-bold">Semester 3</td>
+                            <td>₹40000.00 <i class="far fa-check-circle text-green-500 ml-1"></i></td>
+                            <td>₹600.00 <i class="far fa-check-circle text-green-500 ml-1"></i></td>
+                            <td class="font-bold text-slate-900">₹40600.00</td>
+                            <td class="text-green-500 font-medium">₹40000.00</td>
+                            <td class="text-rose-500 font-medium">₹600.00</td>
+                            <td><span class="status-badge">Partial</span></td>
+                            <td class="pr-6"><button class="btn-pay"><i class="far fa-credit-card"></i> Pay Now</button></td>
+                        </tr>
+                        <tr>
+                            <td class="pl-6 font-bold">Semester 4</td>
+                            <td>₹40000.00 <i class="far fa-check-circle text-green-500 ml-1"></i></td>
+                            <td>₹600.00 <i class="far fa-check-circle text-green-500 ml-1"></i></td>
+                            <td class="font-bold text-slate-900">₹40600.00</td>
+                            <td class="text-green-500 font-medium">₹600.00</td>
+                            <td class="text-rose-500 font-medium">₹40000.00</td>
+                            <td><span class="status-badge">Partial</span></td>
+                            <td class="pr-6"><button class="btn-pay"><i class="far fa-credit-card"></i> Pay Now</button></td>
+                        </tr>
+                        <tr>
+                            <td class="pl-6 font-bold">Semester 5</td>
+                            <td>₹40000.00 <i class="far fa-check-circle text-green-500 ml-1"></i></td>
+                            <td>₹600.00 <i class="far fa-check-circle text-green-500 ml-1"></i></td>
+                            <td class="font-bold text-slate-900">₹40600.00</td>
+                            <td class="text-green-500 font-medium">₹600.00</td>
+                            <td class="text-rose-500 font-medium">₹40000.00</td>
+                            <td><span class="status-badge">Partial</span></td>
+                            <td class="pr-6"><button class="btn-pay"><i class="far fa-credit-card"></i> Pay Now</button></td>
+                        </tr>
+                        <tr>
+                            <td class="pl-6 font-bold">Semester 6</td>
+                            <td>₹40000.00 <i class="far fa-check-circle text-green-500 ml-1"></i></td>
+                            <td>₹600.00 <i class="far fa-check-circle text-green-500 ml-1"></i></td>
+                            <td class="font-bold text-slate-900">₹40600.00</td>
+                            <td class="text-green-500 font-medium">₹600.00</td>
+                            <td class="text-rose-500 font-medium">₹40000.00</td>
+                            <td><span class="status-badge">Partial</span></td>
+                            <td class="pr-6"><button class="btn-pay"><i class="far fa-credit-card"></i> Pay Now</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Mobile Slider -->
+            <div class="fee-slider-wrap">
+                <div class="fee-slider">
+                    <div class="fee-card">
+                        <div class="fee-card-title">Semester 3</div>
+                        <div class="fee-card-row"><span class="label">Semester Fee</span><span class="value">₹40000.00</span></div>
+                        <div class="fee-card-row"><span class="label">Exam Fee</span><span class="value">₹600.00</span></div>
+                        <div class="fee-card-row"><span class="label">Total</span><span class="value">₹40600.00</span></div>
+                        <div class="fee-card-row"><span class="label">Paid</span><span class="value text-green-500">₹40000.00</span></div>
+                        <div class="fee-card-row"><span class="label">Remaining</span><span class="value text-rose-500">₹600.00</span></div>
+                        <div class="fee-card-row"><span class="label">Status</span><span class="status-badge">Partial</span></div>
+                        <button class="btn-pay w-full justify-center mt-3"><i class="far fa-credit-card"></i> Pay Now</button>
+                    </div>
+                    <div class="fee-card">
+                        <div class="fee-card-title">Semester 4</div>
+                        <div class="fee-card-row"><span class="label">Semester Fee</span><span class="value">₹40000.00</span></div>
+                        <div class="fee-card-row"><span class="label">Exam Fee</span><span class="value">₹600.00</span></div>
+                        <div class="fee-card-row"><span class="label">Total</span><span class="value">₹40600.00</span></div>
+                        <div class="fee-card-row"><span class="label">Paid</span><span class="value text-green-500">₹600.00</span></div>
+                        <div class="fee-card-row"><span class="label">Remaining</span><span class="value text-rose-500">₹40000.00</span></div>
+                        <div class="fee-card-row"><span class="label">Status</span><span class="status-badge">Partial</span></div>
+                        <button class="btn-pay w-full justify-center mt-3"><i class="far fa-credit-card"></i> Pay Now</button>
+                    </div>
+                    <div class="fee-card">
+                        <div class="fee-card-title">Semester 5</div>
+                        <div class="fee-card-row"><span class="label">Semester Fee</span><span class="value">₹40000.00</span></div>
+                        <div class="fee-card-row"><span class="label">Exam Fee</span><span class="value">₹600.00</span></div>
+                        <div class="fee-card-row"><span class="label">Total</span><span class="value">₹40600.00</span></div>
+                        <div class="fee-card-row"><span class="label">Paid</span><span class="value text-green-500">₹600.00</span></div>
+                        <div class="fee-card-row"><span class="label">Remaining</span><span class="value text-rose-500">₹40000.00</span></div>
+                        <div class="fee-card-row"><span class="label">Status</span><span class="status-badge">Partial</span></div>
+                        <button class="btn-pay w-full justify-center mt-3"><i class="far fa-credit-card"></i> Pay Now</button>
+                    </div>
+                    <div class="fee-card">
+                        <div class="fee-card-title">Semester 6</div>
+                        <div class="fee-card-row"><span class="label">Semester Fee</span><span class="value">₹40000.00</span></div>
+                        <div class="fee-card-row"><span class="label">Exam Fee</span><span class="value">₹600.00</span></div>
+                        <div class="fee-card-row"><span class="label">Total</span><span class="value">₹40600.00</span></div>
+                        <div class="fee-card-row"><span class="label">Paid</span><span class="value text-teal-500">₹600.00</span></div>
+                        <div class="fee-card-row"><span class="label">Remaining</span><span class="value text-rose-500">₹40000.00</span></div>
+                        <div class="fee-card-row"><span class="label">Status</span><span class="status-badge">Partial</span></div>
+                        <button class="btn-pay w-full justify-center mt-3"><i class="far fa-credit-card"></i> Pay Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment History -->
+        <div class="card">
+            <h3 class="text-lg font-bold mb-2">Payment History</h3>
+            <p class="text-slate-500 text-sm mb-8">Transactions for displayed semesters</p>
+            
+            <!-- Sem 3 -->
+            <div class="mb-10">
+                <h4 class="font-bold mb-4">Semester 3</h4>
+                <div class="table-container">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr class="bg-slate-50">
+                                <th>Transaction ID</th>
+                                <th>Fee Type</th>
+                                <th>Amount</th>
+                                <th>Payment Date</th>
+                                <th>Receipt</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>166814175</td>
+                                <td>Both</td>
+                                <td class="font-bold">₹40000.00</td>
+                                <td>12/17/2024</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Sem 4 -->
+            <div class="mb-10">
+                <h4 class="font-bold mb-4">Semester 4</h4>
+                <div class="table-container">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr class="bg-slate-50">
+                                <th>Transaction ID</th>
+                                <th>Fee Type</th>
+                                <th>Amount</th>
+                                <th>Payment Date</th>
+                                <th>Receipt</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>170742063</td>
+                                <td>Both</td>
+                                <td class="font-bold">₹600.00</td>
+                                <td>4/2/2025</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Sem 5 -->
+            <div class="mb-10">
+                <h4 class="font-bold mb-4">Semester 5</h4>
+                <div class="table-container">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr class="bg-slate-50">
+                                <th>Transaction ID</th>
+                                <th>Fee Type</th>
+                                <th>Amount</th>
+                                <th>Payment Date</th>
+                                <th>Receipt</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>113962852955</td>
+                                <td>Both</td>
+                                <td class="font-bold">₹600.00</td>
+                                <td>9/30/2025</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Sem 6 -->
+            <div>
+                <h4 class="font-bold mb-4">Semester 6</h4>
+                <div class="table-container">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr class="bg-slate-50">
+                                <th>Transaction ID</th>
+                                <th>Fee Type</th>
+                                <th>Amount</th>
+                                <th>Payment Date</th>
+                                <th>Receipt</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>123456789012</td>
+                                <td>Both</td>
+                                <td class="font-bold">₹40600.00</td>
+                                <td>1/15/2026</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Important Note -->
+        <div class="bg-blue-50 border border-blue-100 rounded-xl p-6 flex items-start gap-4 mb-8">
+            <div class="h-10 w-10 bg-blue-100 flex items-center justify-center rounded-full shrink-0">
+                <i class="fas fa-info-circle text-blue-500 text-lg"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-blue-900 mb-1">Important Note</h4>
+                <p class="text-blue-800 text-sm leading-relaxed">
+                    Displaying fee details for the current semester and previous 3 semesters only. For older history or any payment inquiries, please contact the Accounts Office.
+                </p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-end">
+            <p class="text-xs text-slate-500 font-medium bg-slate-50 px-3 py-1 rounded-full">
+                Curated & Coded <span class="text-blue-500">🔵</span> : <span class="text-slate-900 font-semibold">SimonMaity</span>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Dark mode toggle
+        const themeBtn = document.querySelector('button .fa-sun');
+        if (themeBtn) {
+            themeBtn.parentElement.addEventListener('click', () => {
+                const icon = themeBtn;
+                if (icon.classList.contains('fa-sun')) {
+                    icon.classList.replace('fa-sun', 'fa-moon');
+                } else {
+                    icon.classList.replace('fa-moon', 'fa-sun');
+                }
+            });
+        }
+        // Mobile menu toggle
+        document.getElementById('menu-toggle').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('open');
+        });
+    </script>
+</body>
+</html>
